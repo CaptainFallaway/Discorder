@@ -11,9 +11,10 @@ import (
 
 const (
 	ApiVersion   = "v9"
-	MessageLimit = "100" // Adjust as needed. Max is 100.
+	MessageLimit = "100" // Max is 100.
 )
 
+// DiscordClient represents a client for interacting with the Discord API
 type DiscordClient struct {
 	token  string
 	client *http.Client
@@ -26,6 +27,8 @@ func NewDiscordClient(token string) *DiscordClient {
 	}
 }
 
+// getRequest creates a new HTTP request with the necessary headers
+// and returns it. This is used internally to avoid code duplication.
 func (dc *DiscordClient) getRequest(method, path string) http.Request {
 	return http.Request{
 		Method: method,
@@ -69,6 +72,7 @@ func (dc *DiscordClient) RequestWithOptions(method, path string, queries url.Val
 	return resp.Body, nil
 }
 
+// GetAllRelationships retrieves all relationships for the authenticated user
 func (dc *DiscordClient) GetAllRelationships() ([]Relationship, error) {
 	body, err := dc.Request("GET", "/users/@me/relationships")
 	if err != nil {
@@ -85,6 +89,7 @@ func (dc *DiscordClient) GetAllRelationships() ([]Relationship, error) {
 	return relationships, nil
 }
 
+// GetUserChannels retrieves all channels for the authenticated user
 func (dc *DiscordClient) GetUserChannels() ([]Channel, error) {
 	body, err := dc.Request("GET", "/users/@me/channels")
 	if err != nil {
@@ -101,7 +106,8 @@ func (dc *DiscordClient) GetUserChannels() ([]Channel, error) {
 	return channels, nil
 }
 
-func (dc *DiscordClient) CreateDMChannel(userID string) (Channel, error) {
+// GetDMChannel retrieves or creates a DM channel with the specified user ID
+func (dc *DiscordClient) GetDMChannel(userID string) (Channel, error) {
 	payload := io.NopCloser(strings.NewReader(fmt.Sprintf(`{"recipient_id": "%s"}`, userID)))
 
 	body, err := dc.RequestWithOptions("POST", "/users/@me/channels", nil, payload)
@@ -118,6 +124,7 @@ func (dc *DiscordClient) CreateDMChannel(userID string) (Channel, error) {
 	return channel, nil
 }
 
+// RemoveDMChannel deletes a DM channel by its ID
 func (dc *DiscordClient) RemoveDMChannel(channelID string) error {
 	path := fmt.Sprintf("/channels/%s", channelID)
 	_, err := dc.Request("DELETE", path)
@@ -127,6 +134,7 @@ func (dc *DiscordClient) RemoveDMChannel(channelID string) error {
 	return nil
 }
 
+// GetMessages retrieves messages from a channel, paginated by the 'before' parameter
 func (dc *DiscordClient) GetMessages(channelID string, before string) ([]map[string]any, error) {
 	path := fmt.Sprintf("/channels/%s/messages", channelID)
 	queries := url.Values{

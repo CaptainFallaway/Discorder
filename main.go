@@ -19,12 +19,12 @@ func run(token, action string, args []string) error {
 		if err := printDms(dc); err != nil {
 			return fmt.Errorf("error printing DMs: %w", err)
 		}
-	case "cdm":
+	case "gdm":
 		if len(args) < 1 {
-			return fmt.Errorf("user ID is required to create a DM channel")
+			return fmt.Errorf("user ID is required to create / retrieve a DM channel")
 		}
 		userID := args[0]
-		channel, err := dc.CreateDMChannel(userID)
+		channel, err := dc.GetDMChannel(userID)
 		if err != nil {
 			return fmt.Errorf("error creating DM channel: %w", err)
 		}
@@ -49,7 +49,7 @@ func run(token, action string, args []string) error {
 		}
 		prettyPrintJson(messages)
 	default:
-		fmt.Printf("Unknown action \"%s\". Available actions: rels, dms, cdm, rdm, msgs\n", action)
+		fmt.Printf("Unknown action \"%s\". Available actions: rels, dms, gdm, rdm, msgs\n", action)
 	}
 
 	return nil
@@ -70,7 +70,7 @@ func main() {
 		if len(os.Args) < 2 {
 			fmt.Println("Must provide an action when using the DISCORD_TOKEN environment variable")
 			fmt.Println("Usage: ./program <action> [args...]")
-			fmt.Println("Available actions: rels, dms, cdm, rdm, msgs")
+			fmt.Println("Available actions: rels, dms, gdm, rdm, msgs")
 			os.Exit(1)
 		}
 
@@ -82,7 +82,7 @@ func main() {
 			fmt.Println("Must provide a Discord Token and an action")
 			fmt.Println("Usage: ./program <token> <action> [args...]")
 			fmt.Println("   or: DISCORD_TOKEN=your_token ./program <action> [args...]")
-			fmt.Println("Available actions: rels, dms, cdm, rdm, msgs")
+			fmt.Println("Available actions: rels, dms, gdm, rdm, msgs")
 			os.Exit(1)
 		}
 
