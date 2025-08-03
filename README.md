@@ -1,9 +1,16 @@
 # Discorder
 
+## Bulid
+
+```bash
+go mod get
+go build -o discorder .
+```
+
 ## Usage
 
 ```bash
-Usage: ./program <token> <action> [args...]
+Usage: ./discorder <token> <action> [args...]
    or: DISCORD_TOKEN=your_token ./program <action> [args...]
 Available actions: rels, dms, cdm, rdm, msgs
 ```
