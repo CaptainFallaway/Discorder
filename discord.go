@@ -112,8 +112,8 @@ func (dc *DiscordClient) GetUserChannels() ([]Channel, error) {
 	return channels, nil
 }
 
-// GetDMChannel retrieves or creates a DM channel with the specified user ID
-func (dc *DiscordClient) GetDMChannel(userID string) (Channel, error) {
+// CreateDMChannel creates a DM channel with the specified user
+func (dc *DiscordClient) CreateDMChannel(userID string) (Channel, error) {
 	payload := io.NopCloser(strings.NewReader(fmt.Sprintf(`{"recipient_id": "%s"}`, userID)))
 
 	body, err := dc.RequestWithOptions("POST", "/users/@me/channels", nil, payload)
@@ -121,6 +121,13 @@ func (dc *DiscordClient) GetDMChannel(userID string) (Channel, error) {
 		return Channel{}, fmt.Errorf("error creating DM channel: %w", err)
 	}
 	defer body.Close()
+
+	// Print out the whole body for debugging
+	if term.IsTerminal(int(os.Stdout.Fd())) {
+		all, _ := io.ReadAll(body)
+		fmt.Println(string(all))
+		body = io.NopCloser(strings.NewReader(string(all))) // Reset body for further processing
+	}
 
 	var channel Channel
 	if err := json.NewDecoder(body).Decode(&channel); err != nil {

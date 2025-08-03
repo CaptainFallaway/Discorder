@@ -2,6 +2,14 @@
 
 The project is very script-like since I made this in a few hours and I could not care less atm.
 
+## Features
+
+- List all relationships (friends, blocked users, etc.)
+- List all direct message channels
+- Create a DM channel with a user
+- Remove a DM channel (either a user or a group DM)
+- Get all messages from a channel (recommended to pipe out to a file or use `less`)
+
 ## Build
 
 ```bash
@@ -22,7 +30,7 @@ There are three ways to provide the Discord token:
 ```bash
 Usage: ./discorder <token> <action> [args...]
    or: DISCORD_TOKEN=your_token ./discorder <action> [args...]
-Available actions: rels, dms, gdm, rdm, msgs
+Available actions: rels, dms, cdm, rdm, msgs
 ```
 
 ## Examples
@@ -32,8 +40,8 @@ Available actions: rels, dms, gdm, rdm, msgs
 ./discorder your_token rels
 # List all direct message channels
 ./discorder your_token dms
-# Create or get a DM channel with a user
-./discorder your_token gdm <user_id>
+# Create a DM channel with a user
+./discorder your_token cdm <user_id>
 # Remove a DM channel (either a user or a group DM)
 ./discorder your_token rdm <channel_id>
 # Get all messages from a channel (recommended to pipe out to a file)
