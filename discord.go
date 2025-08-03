@@ -6,7 +6,10 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
+
+	"golang.org/x/term"
 )
 
 const (
@@ -57,7 +60,10 @@ func (dc *DiscordClient) RequestWithOptions(method, path string, queries url.Val
 		request.URL.RawQuery = queries.Encode()
 	}
 
-	fmt.Println("Making request:", request.Method, request.URL.String())
+	// Only print debug info if output is going to a terminal (not piped)
+	if term.IsTerminal(int(os.Stdout.Fd())) {
+		fmt.Println("Making request:", request.Method, request.URL.String())
+	}
 
 	resp, err := dc.client.Do(&request)
 	if err != nil {
