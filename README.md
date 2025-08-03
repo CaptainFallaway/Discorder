@@ -1,7 +1,5 @@
 # Discorder
 
-Discorder is a command-line tool designed to retrieve all messages from a user's DM channels. It also includes features for managing direct messages (DMs) and relationships, such as viewing your friends list, creating new / getting DM channels from a user id, and then also deleting existing DMs ones.
-
 The project is very script-like since I made this in a few hours and I could not care less atm.
 
 ## Build
