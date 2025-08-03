@@ -3,7 +3,7 @@
 ## Build
 
 ```bash
-go mod get
+go mod download
 go build -o discorder .
 ```
 
