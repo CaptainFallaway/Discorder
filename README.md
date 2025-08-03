@@ -1,6 +1,6 @@
 # Discorder
 
-## Bulid
+## Build
 
 ```bash
 go mod get
