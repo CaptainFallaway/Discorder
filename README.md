@@ -1,5 +1,9 @@
 # Discorder
 
+A simple Go program to interact with Discord's API for managing relationships and direct messages.
+
+The project is very script-like since i made this in a few hours and i could not care less atm.
+
 ## Build
 
 ```bash
