@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"slices"
 	"time"
 
 	"github.com/hokaccha/go-prettyjson"
@@ -27,23 +26,58 @@ func formatTimeSince(sinceStr string) string {
 		if hours < 1 {
 			return "Less than an hour ago"
 		}
-		return fmt.Sprintf("%d hour(s) ago", hours)
+		if hours == 1 {
+			return "1 hour ago"
+		}
+		return fmt.Sprintf("%d hours ago", hours)
 	} else if days < 30 {
-		return fmt.Sprintf("%d day(s) ago", days)
+		if days == 1 {
+			return "1 day ago"
+		}
+		return fmt.Sprintf("%d days ago", days)
 	} else if days < 365 {
 		months := days / 30
-		return fmt.Sprintf("%d month(s) ago", months)
+		if months == 1 {
+			return "1 month ago"
+		}
+		return fmt.Sprintf("%d months ago", months)
 	} else {
 		years := days / 365
 		remainingDays := days % 365
 		if remainingDays < 30 {
-			return fmt.Sprintf("%d year(s) ago", years)
+			if years == 1 {
+				return "1 year ago"
+			}
+			return fmt.Sprintf("%d years ago", years)
 		} else {
 			months := remainingDays / 30
-			return fmt.Sprintf("%d year(s), %d month(s) ago", years, months)
+			yearText := "year"
+			monthText := "month"
+
+			if years > 1 {
+				yearText = "years"
+			}
+			if months > 1 {
+				monthText = "months"
+			}
+
+			return fmt.Sprintf("%d %s, %d %s ago", years, yearText, months, monthText)
 		}
 	}
+}
 
+func formatTime(sinceStr string) string {
+	if sinceStr == "" {
+		return "Unknown"
+	}
+
+	// Parse the ISO 8601 date string
+	since, err := time.Parse(time.RFC3339, sinceStr)
+	if err != nil {
+		return sinceStr // Return original if parsing fails
+	}
+
+	return since.Format("2006-01-02 15:04")
 }
 
 func getName(user User) string {
@@ -60,27 +94,4 @@ func prettyPrintJson(v any) {
 		return
 	}
 	fmt.Println(string(prettyjson))
-}
-
-func getAllMessages(dc *DiscordClient, channelID string) ([]map[string]any, error) {
-	allMessages := make([]map[string]any, 0, 100)
-	var before string
-
-	for {
-		messages, err := dc.GetMessages(channelID, before)
-		if err != nil {
-			return nil, fmt.Errorf("error fetching messages: %w", err)
-		}
-
-		if len(messages) == 0 {
-			break
-		}
-
-		allMessages = append(allMessages, messages...)
-		before = messages[len(messages)-1]["id"].(string) // Use the last message's ID for the next request
-	}
-
-	slices.Reverse(allMessages)
-
-	return allMessages, nil
 }

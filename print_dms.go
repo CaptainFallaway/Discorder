@@ -12,62 +12,100 @@ func printDms(dc *DiscordClient) error {
 		return fmt.Errorf("failed to get user channels: %w", err)
 	}
 
-	// Filter only DM channels
-	dmChannels := make([]Channel, 0)
+	sortChannels(channels)
+
+	// Separate channels by type
+	groupDMs := make([]Channel, 0)
+	privateDMs := make([]Channel, 0)
+
 	for _, channel := range channels {
-		if channel.Type == ChannelDM || channel.Type == ChannelGroupDM {
-			dmChannels = append(dmChannels, channel)
-		}
-	}
-
-	if len(dmChannels) == 0 {
-		fmt.Println("No direct message channels found.")
-		return fmt.Errorf("no direct message channels found")
-	}
-
-	// Create table data
-	tableData := [][]string{
-		{"Channel ID", "Type", "Name", "Recipients"},
-	}
-
-	for _, channel := range dmChannels {
-		channelType := ""
 		switch channel.Type {
-		case ChannelDM:
-			channelType = "DM"
 		case ChannelGroupDM:
-			channelType = "Group DM"
-		default:
-			channelType = "Unknown"
+			groupDMs = append(groupDMs, channel)
+		case ChannelDM:
+			privateDMs = append(privateDMs, channel)
 		}
+	}
 
+	// Print Group DMs first
+	if err := printGroupDMs(groupDMs); err != nil {
+		return err
+	}
+
+	// Print Private DMs second
+	if err := printPrivateDMs(privateDMs); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func printGroupDMs(channels []Channel) error {
+	if len(channels) == 0 {
+		fmt.Println("No group DM channels found.")
+		return nil
+	}
+
+	// Create table data for Group DMs
+	tableData := [][]string{
+		{"Channel ID", "Name", "Recipients"},
+	}
+
+	for _, channel := range channels {
 		// Build recipients list
 		recipients := ""
 		for i, recipient := range channel.Recipients {
-			// name := getName(recipient)
-			name := recipient.Username
-
+			name := getName(recipient)
 			if i > 0 {
 				recipients += ", "
 			}
 			recipients += name
 		}
 
-		// Use channel name if available (for group DMs), otherwise use recipients
 		channelName := channel.Name
 		if channelName == "" {
-			channelName = recipients
+			channelName = "Unnamed Group"
 		}
 
 		tableData = append(tableData, []string{
 			channel.ID,
-			channelType,
 			channelName,
 			recipients,
 		})
 	}
 
-	fmt.Printf("Found %d direct message channels:\n\n", len(dmChannels))
+	fmt.Printf("Found %d group DM channels:\n\n", len(channels))
+	pterm.DefaultTable.WithHasHeader().WithData(tableData).Render()
+	fmt.Println()
+
+	return nil
+}
+
+func printPrivateDMs(channels []Channel) error {
+	if len(channels) == 0 {
+		fmt.Println("No private DM channels found.")
+		return nil
+	}
+
+	// Create table data for Private DMs (no recipients column)
+	tableData := [][]string{
+		{"Channel ID", "User"},
+	}
+
+	for _, channel := range channels {
+		// For private DMs, show the other user's name
+		userName := "Unknown User"
+		if len(channel.Recipients) > 0 {
+			userName = getName(channel.Recipients[0])
+		}
+
+		tableData = append(tableData, []string{
+			channel.ID,
+			userName,
+		})
+	}
+
+	fmt.Printf("Found %d private DM channels:\n\n", len(channels))
 	pterm.DefaultTable.WithHasHeader().WithData(tableData).Render()
 
 	return nil

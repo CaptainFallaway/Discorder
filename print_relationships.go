@@ -13,13 +13,14 @@ func printRelationships(dc *DiscordClient) error {
 	}
 
 	if len(relationships) == 0 {
-		fmt.Println("No relationships found.")
 		return fmt.Errorf("no relationships found")
 	}
 
+	sortRelationships(relationships)
+
 	// Create table data
 	tableData := [][]string{
-		{"Global Name (Username)", "Nickname", "User ID", "Type", "Since"},
+		{"User ID", "Global Name (Username) aka [Nickname]", "Type", "Since"},
 	}
 
 	for _, rel := range relationships {
@@ -41,11 +42,15 @@ func printRelationships(dc *DiscordClient) error {
 
 		name := getName(rel.User)
 		since := formatTimeSince(rel.Since)
+		since = fmt.Sprintf("%s (%s)", formatTime(rel.Since), since)
+
+		if rel.Nickname != "" {
+			name = fmt.Sprintf("%s aka [%s]", name, rel.Nickname)
+		}
 
 		tableData = append(tableData, []string{
-			name,
-			rel.Nickname,
 			rel.User.ID,
+			name,
 			relationshipType,
 			since,
 		})
