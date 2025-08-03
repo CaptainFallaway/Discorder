@@ -122,13 +122,6 @@ func (dc *DiscordClient) CreateDMChannel(userID string) (Channel, error) {
 	}
 	defer body.Close()
 
-	// Print out the whole body for debugging
-	if term.IsTerminal(int(os.Stdout.Fd())) {
-		all, _ := io.ReadAll(body)
-		fmt.Println(string(all))
-		body = io.NopCloser(strings.NewReader(string(all))) // Reset body for further processing
-	}
-
 	var channel Channel
 	if err := json.NewDecoder(body).Decode(&channel); err != nil {
 		return Channel{}, fmt.Errorf("error parsing JSON response: %w", err)
