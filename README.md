@@ -11,6 +11,14 @@ go mod download
 go build -o discorder .
 ```
 
+## Notes
+
+There are three ways to provide the Discord token:
+
+1. As the first argument when running the program.
+2. As an environment variable `DISCORD_TOKEN`.
+3. As an environment variable `DISCORD_TOKEN` in a `.env` file in the same directory as the program
+
 ## Usage
 
 ```bash
