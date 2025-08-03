@@ -1,8 +1,8 @@
 # Discorder
 
-A simple Go program to interact with Discord's API for managing relationships and direct messages.
+Discorder is a command-line tool designed to retrieve all messages from a user's DM channels. It also includes features for managing direct messages (DMs) and relationships, such as viewing your friends list, creating new / getting DM channels from a user id, and then also deleting existing DMs ones.
 
-The project is very script-like since i made this in a few hours and i could not care less atm.
+The project is very script-like since I made this in a few hours and I could not care less atm.
 
 ## Build
 
@@ -23,21 +23,21 @@ There are three ways to provide the Discord token:
 
 ```bash
 Usage: ./discorder <token> <action> [args...]
-   or: DISCORD_TOKEN=your_token ./program <action> [args...]
+   or: DISCORD_TOKEN=your_token ./discorder <action> [args...]
 Available actions: rels, dms, gdm, rdm, msgs
 ```
 
 ## Examples
 
 ```bash
-# List all relationships
+# List all relationships (friends, blocked users, etc.)
 ./discorder your_token rels
 # List all direct message channels
 ./discorder your_token dms
 # Create or get a DM channel with a user
 ./discorder your_token gdm <user_id>
-# Remove a DM channel with a user
-./discorder your_token rdm <user_id>
-# Get messages from a channel
+# Remove a DM channel (either a user or a group DM)
+./discorder your_token rdm <channel_id>
+# Get all messages from a channel (recommended to pipe out to a file)
 ./discorder your_token msgs <channel_id>
 ```
