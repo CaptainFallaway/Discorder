@@ -21,6 +21,10 @@ func getAllMessages(dc *DiscordClient, channelID string) ([]map[string]any, erro
 
 		allMessages = append(allMessages, messages...)
 		before = messages[len(messages)-1]["id"].(string) // Use the last message's ID for the next request
+
+		if len(messages) < 100 {
+			break
+		}
 	}
 
 	slices.Reverse(allMessages)
