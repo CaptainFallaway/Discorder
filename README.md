@@ -1,19 +1,17 @@
 # Discorder
 
-A small CLI tool to interact with Discord's API for personal account data: list relationships and DMs, create/delete DM channels, and dump messages.
+This is a CLI tool to list relationships and DM channels, create or remove DM channels, view your guilds and their channels, and export messages from channels you can access with your user token.
 
-This repository has been refactored to idiomatic Go layout:
-
-- `cmd/discorder/` – main CLI entrypoint
-- `internal/discord/` – Discord client and data types
-- `internal/cli/` – CLI helpers: formatting, sorting, printing, message utilities
+This tool is intended for personal use and does not support bot accounts. It uses the Discord API directly, so it may break if Discord changes their API.
 
 ## Features
 
 - List all relationships (friends, blocked users, etc.)
-- List all direct message channels
+- List all direct message channels (dms)
 - Create a DM channel with a user
 - Remove a DM channel (either a user or a group DM)
+- List all guilds the user belongs to
+- List channels in a guild
 - Get all messages from a channel (pipe to a file or pager)
 
 ## Build
