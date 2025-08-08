@@ -1,13 +1,11 @@
-package main
+package cli
 
 import (
 	"fmt"
 	"time"
-
-	"github.com/hokaccha/go-prettyjson"
 )
 
-func formatTimeSince(sinceStr string) string {
+func FormatTimeSince(sinceStr string) string {
 	if sinceStr == "" {
 		return "Unknown"
 	}
@@ -66,7 +64,7 @@ func formatTimeSince(sinceStr string) string {
 	}
 }
 
-func formatTime(sinceStr string) string {
+func FormatTime(sinceStr string) string {
 	if sinceStr == "" {
 		return "Unknown"
 	}
@@ -78,20 +76,4 @@ func formatTime(sinceStr string) string {
 	}
 
 	return since.Format("2006-01-02 15:04")
-}
-
-func getName(user User) string {
-	if user.GlobalName == "" {
-		return user.Username
-	}
-	return fmt.Sprintf("%s (%s)", user.GlobalName, user.Username)
-}
-
-func prettyPrintJson(v any) {
-	prettyjson, err := prettyjson.Marshal(v)
-	if err != nil {
-		fmt.Println("Error marshaling to pretty JSON:", err)
-		return
-	}
-	fmt.Println(string(prettyjson))
 }
