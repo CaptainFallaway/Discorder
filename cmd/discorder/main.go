@@ -6,13 +6,17 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"golang.org/x/term"
 
 	"getAllDiscordMessages/internal/cli"
 	"getAllDiscordMessages/internal/discord"
 )
 
 func run(token, action string, args []string) error {
-	dc := discord.NewDiscordClient(token)
+	// Only print debug info if output is going to a terminal (not piped)
+	debug := term.IsTerminal(int(os.Stdout.Fd()))
+
+	dc := discord.NewDiscordClient(token, debug)
 
 	switch action {
 	case "relationships":
