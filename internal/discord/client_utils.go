@@ -67,7 +67,7 @@ func (dc *DiscordClient) buildRequest(ctx context.Context, method, path string, 
 		return nil, fmt.Errorf("creating request: %w", err)
 	}
 
-	// Set headers to match provided set
+	// Set headers to match a discord client request
 	req.Header = http.Header{
 		"Authorization":      []string{dc.token},
 		"Accept":             []string{"*/*"},
