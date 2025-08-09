@@ -4,7 +4,7 @@ import (
 	"slices"
 	"strings"
 
-	"getAllDiscordMessages/internal/discord"
+	"github.com/CaptainFallaway/Discorder/internal/discord"
 )
 
 // getChannelSortName returns the name to use for sorting a channel

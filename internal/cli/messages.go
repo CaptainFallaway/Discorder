@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"slices"
 
-	"getAllDiscordMessages/internal/discord"
+	"github.com/CaptainFallaway/Discorder/internal/discord"
 )
 
 func GetAllMessages(dc *discord.DiscordClient, channelID string) ([]map[string]any, error) {

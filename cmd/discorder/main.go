@@ -8,8 +8,8 @@ import (
 	"github.com/joho/godotenv"
 	"golang.org/x/term"
 
-	"getAllDiscordMessages/internal/cli"
-	"getAllDiscordMessages/internal/discord"
+	"github.com/CaptainFallaway/Discorder/internal/cli"
+	"github.com/CaptainFallaway/Discorder/internal/discord"
 )
 
 func run(token, action string, args []string) error {

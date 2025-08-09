@@ -8,7 +8,7 @@ import (
 
 	"github.com/pterm/pterm"
 
-	"getAllDiscordMessages/internal/discord"
+	"github.com/CaptainFallaway/Discorder/internal/discord"
 )
 
 func PrintDMs(dc *discord.DiscordClient) error {
