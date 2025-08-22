@@ -24,7 +24,7 @@ go build -o discorder ./cmd/discorder
 Or install:
 
 ```bash
-go install ./cmd/discorder
+go install github.com/CaptainFallaway/Discorder/cmd/discorder@latest
 ```
 
 ## Auth token
